@@ -168,9 +168,9 @@ with tf.name_scope( 'train_op' ):
 
 init = tf.global_variables_initializer()
 
-batch_size = 100
-train_steps = 20000
-test_steps = 100
+batch_size = 150
+train_steps = 15000
+test_steps = 50
 sess=tf.Session(config=tf.ConfigProto(device_count={"CPU":12}))
 sess.run( init )
 for i in range( train_steps ):
