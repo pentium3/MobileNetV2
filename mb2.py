@@ -8,6 +8,8 @@ import tensorflow.contrib as tc
 import warnings
 warnings.simplefilter('ignore')
 
+from ops import *
+
 CIFAR_DIR = "./cifar-10-batches-py"
 
 def load_data( filename ):
@@ -59,62 +61,6 @@ train_data = CifarData( train_filename, True )
 test_data = CifarData( test_filename, False )
 
 
-def separable_conv_block(x,  output_channel_number, name, is_train):
-    '''
-    mobilenet 卷积块
-    :param x:
-    :param output_channel_number:  输出通道数量 output channel of 1*1 conv layer
-    :param name:
-    :is_train: 是否进行卷积
-    :return:
-    '''
-    with tf.variable_scope(name):
-        input_channel = x.get_shape().as_list()[-1]
-        # channel_wise_x: [channel1, channel2, ...]
-        channel_wise_x = tf.split(x, input_channel, axis = 3)
-        output_channels = []
-        for i in range(len(channel_wise_x)):
-            output_channel = tf.layers.conv2d(channel_wise_x[i],
-                                              1,
-                                              (3, 3),
-                                              strides = (1, 1),
-                                              padding = 'same',
-                                              activation = None,
-                                              name = 'conv_%d' % i
-                                              )
-            bn = tf.layers.batch_normalization(output_channel, training = is_train)
-            new_output_channel = tf.nn.relu(bn)
-            output_channels.append(new_output_channel)
-        concat_layer = tf.concat(output_channels, axis = 3)
-        conv1_1 = tf.layers.conv2d(concat_layer,
-                                   output_channel_number,
-                                   (1, 1),
-                                   strides = (1, 1),
-                                   padding = 'same',
-                                   activation = None,
-                                   name = name+'/conv1_1'
-                                   )
-        bn = tf.layers.batch_normalization(conv1_1, training = is_train)
-        return tf.nn.relu(bn)
-
-
-def inverted_bottleneck(idx, input, up_sample_rate, channels, subsample, is_train):
-    normalizer = tc.layers.batch_norm
-    bn_params = {'is_training': is_train}
-    with tf.variable_scope('inverted_bottleneck{}_{}_{}'.format(idx, up_sample_rate, subsample)):
-        stride = 2 if subsample else 1
-        output = tc.layers.conv2d(input, up_sample_rate*input.get_shape().as_list()[-1], 1,
-                                  activation_fn=tf.nn.relu6,
-                                  normalizer_fn=normalizer, normalizer_params=bn_params)
-        output = tc.layers.separable_conv2d(output, None, 3, 1, stride=stride,
-                                            activation_fn=tf.nn.relu6,
-                                            normalizer_fn=normalizer, normalizer_params=bn_params)
-        output = tc.layers.conv2d(output, channels, 1, activation_fn=None,
-                                  normalizer_fn=normalizer, normalizer_params=bn_params)
-        if input.get_shape().as_list()[-1] == channels:
-            output = tf.add(input, output)
-        return output
-
 
 IMPCLAS=10
 x = tf.placeholder( tf.float32, [None, 3072] )
@@ -124,40 +70,36 @@ is_train = tf.placeholder(tf.bool, [])
 x_image = tf.reshape( x, [-1, 3, 32, 32] )
 x_image = tf.transpose( x_image, perm= [0, 2, 3, 1] )   #x_image.shape == -1,32,32,3
 
-# conv1 = tf.layers.conv2d(x_image, 32, ( 3, 3 ), padding = 'same', activation = tf.nn.relu, name = 'conv1')
-# pooling1 = tf.layers.max_pooling2d(conv1, ( 2, 2 ), ( 2, 2 ), name='pool1')
-# separable_2a = separable_conv_block(pooling1, 32, name = 'separable_2a', is_train = is_train)
-# separable_2b = separable_conv_block(separable_2a, 32, name = 'separable_2b', is_train = is_train)
-# pooling2 = tf.layers.max_pooling2d(separable_2b, ( 2, 2 ), ( 2, 2 ), name='pool2')
-# separable_3a = separable_conv_block(pooling2, 32, name = 'separable_3a', is_train = is_train)
-# separable_3b = separable_conv_block(separable_3a, 32, name = 'separable_3b', is_train = is_train)
-# pooling3 = tf.layers.max_pooling2d(separable_3b, ( 2, 2 ), ( 2, 2 ), name='pool3')
-# flatten = tf.contrib.layers.flatten(pooling3)
-# y_ = tf.layers.dense(flatten, 10)
-# print(y_.get_shape())
+net = conv2d_block(x_image, 32, 3, 2, is_train, name='conv1_1')  # size/2
 
-#output = tc.layers.conv2d(x, 32, 3, 2, normalizer_fn=tc.layers.batch_norm, normalizer_params={'is_training': is_train})
-output = tf.layers.conv2d(x_image, 32, ( 3, 3 ), padding = 'same', activation = tf.nn.relu, name = 'conv1')
-output = inverted_bottleneck(1,output, 1, 16, 0, is_train)
-output = inverted_bottleneck(2,output, 6, 24, 1, is_train)
-output = inverted_bottleneck(3,output, 6, 24, 0, is_train)
-output = inverted_bottleneck(4,output, 6, 32, 1, is_train)
-output = inverted_bottleneck(5,output, 6, 32, 0, is_train)
-output = inverted_bottleneck(6,output, 6, 32, 0, is_train)
-output = inverted_bottleneck(7,output, 6, 64, 1, is_train)
-output = inverted_bottleneck(8,output, 6, 64, 0, is_train)
-output = inverted_bottleneck(9,output, 6, 64, 0, is_train)
-output = inverted_bottleneck(10,output, 6, 64, 0, is_train)
-output = inverted_bottleneck(11,output, 6, 96, 0, is_train)
-output = inverted_bottleneck(12,output, 6, 96, 0, is_train)
-output = inverted_bottleneck(13,output, 6, 96, 0, is_train)
-output = inverted_bottleneck(14,output, 6, 160, 1, is_train)
-output = inverted_bottleneck(15,output, 6, 160, 0, is_train)
-output = inverted_bottleneck(16,output, 6, 160, 0, is_train)
-output = inverted_bottleneck(17,output, 6, 320, 0, is_train)
-output = tc.layers.conv2d(output, 1280, 1, normalizer_fn=tc.layers.batch_norm, normalizer_params={'is_training': is_train})
-flatten = tf.contrib.layers.flatten(output)
-y_ = tf.layers.dense(flatten, 10)
+net = res_block(net, 1, 16, 1, is_train, name='res2_1')
+
+net = res_block(net, 6, 24, 2, is_train, name='res3_1')  # size/4
+net = res_block(net, 6, 24, 1, is_train, name='res3_2')
+
+net = res_block(net, 6, 32, 2, is_train, name='res4_1')  # size/8
+net = res_block(net, 6, 32, 1, is_train, name='res4_2')
+net = res_block(net, 6, 32, 1, is_train, name='res4_3')
+
+net = res_block(net, 6, 64, 1, is_train, name='res5_1')
+net = res_block(net, 6, 64, 1, is_train, name='res5_2')
+net = res_block(net, 6, 64, 1, is_train, name='res5_3')
+net = res_block(net, 6, 64, 1, is_train, name='res5_4')
+
+net = res_block(net, 6, 96, 2, is_train, name='res6_1')  # size/16
+net = res_block(net, 6, 96, 1, is_train, name='res6_2')
+net = res_block(net, 6, 96, 1, is_train, name='res6_3')
+
+net = res_block(net, 6, 160, 2, is_train, name='res7_1')  # size/32
+net = res_block(net, 6, 160, 1, is_train, name='res7_2')
+net = res_block(net, 6, 160, 1, is_train, name='res7_3')
+
+net = res_block(net, 6, 320, 1, is_train, name='res8_1', shortcut=False)
+
+net = pwise_block(net, 1280, is_train, name='conv9_1')
+net = global_avg(net)
+y_ = flatten(conv_1x1(net, IMPCLAS, name='logits'))
+
 print("output size:", y_.get_shape())
 
 
