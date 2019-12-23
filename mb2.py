@@ -169,7 +169,7 @@ with tf.name_scope( 'train_op' ):
 init = tf.global_variables_initializer()
 
 batch_size = 32
-train_steps = 75000
+train_steps = 40000  #60000 is the original setting
 test_steps = 100
 sess=tf.Session(config=tf.ConfigProto(device_count={"CPU":12}))
 sess.run( init )
