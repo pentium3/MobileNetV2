@@ -110,7 +110,7 @@ class DataSets:
 
 train_filename = [os.path.join(CIFAR_DIR, 'data_batch_%d' % i) for i in range(1, 6)]
 #test_filename = [os.path.join(CIFAR_DIR, 'test_batch')]
-train_data_old = CifarData( train_filename, True )
+# train_data_old = CifarData( train_filename, True )
 # test_data_old = CifarData( test_filename, False )
 train_data = DataSets( 'train', True )
 
