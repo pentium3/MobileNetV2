@@ -125,31 +125,32 @@ is_train = tf.placeholder(tf.bool, [])
 
 net = conv2d_block(x, 32, 3, 2, is_train, name='conv1_1')  # size/2
 
-net = res_block(net, 1, 16, 1, is_train, name='res2_1')
+#net = res_block(net, 1, 16, 1, is_train, name='res2_1')
 
-net = res_block(net, 6, 24, 2, is_train, name='res3_1')  # size/4
-net = res_block(net, 6, 24, 1, is_train, name='res3_2')
+#net = res_block(net, 6, 24, 2, is_train, name='res3_1')  # size/4
+#net = res_block(net, 6, 24, 1, is_train, name='res3_2')
 
-net = res_block(net, 6, 32, 2, is_train, name='res4_1')  # size/8
-net = res_block(net, 6, 32, 1, is_train, name='res4_2')
-net = res_block(net, 6, 32, 1, is_train, name='res4_3')
+#net = res_block(net, 6, 32, 2, is_train, name='res4_1')  # size/8
+#net = res_block(net, 6, 32, 1, is_train, name='res4_2')
+#net = res_block(net, 6, 32, 1, is_train, name='res4_3')
 
 net = res_block(net, 6, 64, 1, is_train, name='res5_1')
-net = res_block(net, 6, 64, 1, is_train, name='res5_2')
-net = res_block(net, 6, 64, 1, is_train, name='res5_3')
-net = res_block(net, 6, 64, 1, is_train, name='res5_4')
+#net = res_block(net, 6, 64, 1, is_train, name='res5_2')
+#net = res_block(net, 6, 64, 1, is_train, name='res5_3')
+#net = res_block(net, 6, 64, 1, is_train, name='res5_4')
 
-net = res_block(net, 6, 96, 2, is_train, name='res6_1')  # size/16
-net = res_block(net, 6, 96, 1, is_train, name='res6_2')
-net = res_block(net, 6, 96, 1, is_train, name='res6_3')
+#net = res_block(net, 6, 96, 2, is_train, name='res6_1')  # size/16
+#net = res_block(net, 6, 96, 1, is_train, name='res6_2')
+#net = res_block(net, 6, 96, 1, is_train, name='res6_3')
 
-net = res_block(net, 6, 160, 2, is_train, name='res7_1')  # size/32
-net = res_block(net, 6, 160, 1, is_train, name='res7_2')
-net = res_block(net, 6, 160, 1, is_train, name='res7_3')
+#net = res_block(net, 6, 160, 2, is_train, name='res7_1')  # size/32
+#net = res_block(net, 6, 160, 1, is_train, name='res7_2')
+#net = res_block(net, 6, 160, 1, is_train, name='res7_3')
 
 net = res_block(net, 6, 320, 1, is_train, name='res8_1', shortcut=False)
 
-net = pwise_block(net, 1280, is_train, name='conv9_1')
+#net = pwise_block(net, 1280, is_train, name='conv9_1')
+net = pwise_block(net, 512, is_train, name='conv9_1')
 net = global_avg(net)
 y_ = flatten(conv_1x1(net, IMPCLAS, name='logits'))
 
@@ -169,7 +170,7 @@ with tf.name_scope( 'train_op' ):
 init = tf.global_variables_initializer()
 
 batch_size = 32
-train_steps = 40000  #60000 is the original setting
+train_steps = 12000  #60000 is the original setting
 test_steps = 100
 sess=tf.Session(config=tf.ConfigProto(device_count={"CPU":12}))
 sess.run( init )
