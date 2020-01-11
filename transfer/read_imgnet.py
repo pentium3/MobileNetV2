@@ -163,3 +163,5 @@ sess.run(init)
 coord = tf.train.Coordinator()
 threads = tf.train.start_queue_runners(sess=sess)
 t_images, t_labels = sess.run([train_images, train_labels_onehot])
+
+print(t_images)
