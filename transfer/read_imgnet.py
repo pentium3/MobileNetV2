@@ -120,8 +120,8 @@ def batch_inputs(dataset, batch_size, train, num_preprocess_threads=None, num_re
             reader = tf.TFRecordReader()
             _, example_serialized = reader.read(filename_queue)
         # Reshape images into these desired dimensions.
-        height = 32
-        width = 32
+        height = 256
+        width = 256
         depth = 3
         images_and_labels = []
         for thread_id in range(num_preprocess_threads):
