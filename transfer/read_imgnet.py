@@ -143,17 +143,18 @@ def batch_inputs(dataset, batch_size, train, num_preprocess_threads=None, num_re
 
 train_dataset = tf.io.gfile.glob(tf_train_record_pattern)
 train_images, train_labels = batch_inputs(train_dataset, batch_size, train=True, num_preprocess_threads=2, num_readers=2)
-train_labels_onehot = tf.one_hot(train_labels, num_classes, on_value=1, off_value=0, axis=1)
+#train_labels_onehot = tf.one_hot(train_labels, num_classes, on_value=1, off_value=0, axis=1)
 
 print(train_images.get_shape())
-print(train_labels_onehot.get_shape())
+print(train_labels.get_shape())
+
 
 val_dataset = tf.io.gfile.glob(tf_val_record_pattern)
 val_images, val_labels = batch_inputs(val_dataset, sub_batch_size, train=False, num_preprocess_threads=1, num_readers=1)
-val_labels_onehot = tf.one_hot(val_labels, num_classes, on_value=1, off_value=0, axis=1)
+#val_labels_onehot = tf.one_hot(val_labels, num_classes, on_value=1, off_value=0, axis=1)
 
 print(val_images.get_shape())
-print(val_labels_onehot.get_shape())
+print(val_labels.get_shape())
 
 
 #sess = tf.compat.v1.train.MonitoredTrainingSession(master=server.target, is_chief=(task_number == 0), hooks=[sync_replicas_hook])
@@ -162,6 +163,7 @@ init = tf.compat.v1.global_variables_initializer()
 sess.run(init)
 coord = tf.train.Coordinator()
 threads = tf.train.start_queue_runners(sess=sess)
-t_images, t_labels = sess.run([train_images, train_labels_onehot])
+t_images, t_labels = sess.run([train_images, train_labels])
 
 print(t_images)
+print(t_labels)
