@@ -5,15 +5,9 @@ import sys
 
 num_classes = 100
 batch_size = 107
-num_example_per_epoch = 128721
-num_batches_per_epoch = (num_example_per_epoch / batch_size)        #40,036
 
 examples_per_shard = 1030
 input_queue_memory_factor = 3
-num_worker = 1
-sub_batch_size = int(batch_size / num_worker)
-
-
 tf_train_record_pattern = "/home/tidb/Desktop/tfrecord_subclasses_train/train-*"
 tf_val_record_pattern = "/home/tidb/Desktop/tfrecord_subclasses_val/val-*"
 
@@ -150,7 +144,7 @@ print(train_labels.get_shape())
 
 
 val_dataset = tf.io.gfile.glob(tf_val_record_pattern)
-val_images, val_labels = batch_inputs(val_dataset, sub_batch_size, train=False, num_preprocess_threads=1, num_readers=1)
+val_images, val_labels = batch_inputs(val_dataset, batch_size, train=False, num_preprocess_threads=1, num_readers=1)
 #val_labels_onehot = tf.one_hot(val_labels, num_classes, on_value=1, off_value=0, axis=1)
 
 print(val_images.get_shape())
