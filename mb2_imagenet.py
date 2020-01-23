@@ -61,11 +61,6 @@ class DataSets:
         return batch_data, batch_labels
 
 
-
-#train_filename = [os.path.join(CIFAR_DIR, 'data_batch_%d' % i) for i in range(1, 6)]
-#test_filename = [os.path.join(CIFAR_DIR, 'test_batch')]
-# train_data_old = CifarData( train_filename, True )
-# test_data_old = CifarData( test_filename, False )
 train_data = DataSets( 'train', True )
 
 batch_size = 32
@@ -137,7 +132,6 @@ with tf.Session(config=tf.ConfigProto(device_count={"CPU":12})) as sess:
         if ( i+1 ) % 200 == 0:
             print('[Train] Step: %d, loss: %4.5f, acc: %4.5f' % ( i+1, loss_val, acc_val ))
         if ( i+1 ) % 1000 == 0:
-            #test_data = CifarData( test_filename, False )
             test_data = DataSets( 'test', False )
             all_test_acc_val = []
             for j in range( test_steps ):

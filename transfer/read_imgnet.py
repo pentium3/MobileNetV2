@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 import time
 import sys
+import matplotlib.pyplot as plt
 
 num_classes = 100
 batch_size = 107
@@ -11,6 +12,9 @@ input_queue_memory_factor = 3
 tf_train_record_pattern = "/home/tidb/Desktop/tfrecord_subclasses_train/train-*"
 tf_val_record_pattern = "/home/tidb/Desktop/tfrecord_subclasses_val/val-*"
 
+height = 32
+width = 32
+depth = 3
 
 
 def parse_example_proto(example_serialized):
@@ -56,6 +60,7 @@ def decode_jpeg(image_buffer, scope=None):
         # that is set dynamically by decode_jpeg. In other words, the height
         # and width of image is unknown at compile-time.
         image = tf.image.decode_jpeg(image_buffer, channels=3)
+        image = tf.image.resize_images(image, [height,width],method=1)
         # After this point, all image pixels reside in [0,1)
         # until the very end, when they're rescaled to (-1, 1).  The various
         # adjust_* ops all require this range for dtype float.
@@ -114,9 +119,6 @@ def batch_inputs(dataset, batch_size, train, num_preprocess_threads=None, num_re
             reader = tf.TFRecordReader()
             _, example_serialized = reader.read(filename_queue)
         # Reshape images into these desired dimensions.
-        height = 256
-        width = 256
-        depth = 3
         images_and_labels = []
         for thread_id in range(num_preprocess_threads):
             # Parse a serialized Example proto to extract the image and metadata.
@@ -134,27 +136,30 @@ def batch_inputs(dataset, batch_size, train, num_preprocess_threads=None, num_re
         return images, tf.reshape(label_index_batch, [batch_size])
 
 
+def next_batch(batch_size, label):
+    if(label=='train'):
+        train_dataset = tf.io.gfile.glob(tf_train_record_pattern)
+        images, labels = batch_inputs(train_dataset, batch_size, train=True, num_preprocess_threads=2, num_readers=2)
+        #train_labels_onehot = tf.one_hot(train_labels, num_classes, on_value=1, off_value=0, axis=1)
+    elif(label=='test'):
+        val_dataset = tf.io.gfile.glob(tf_val_record_pattern)
+        images, labels = batch_inputs(val_dataset, batch_size, train=False, num_preprocess_threads=1, num_readers=1)
+        #val_labels_onehot = tf.one_hot(val_labels, num_classes, on_value=1, off_value=0, axis=1)
+    print(images.get_shape())    # (107, 256, 256, 3)
+    print(labels.get_shape())    # (107,)
+    #sess = tf.compat.v1.train.MonitoredTrainingSession(master=server.target, is_chief=(task_number == 0), hooks=[sync_replicas_hook])
+    sess=tf.Session()
+    init = tf.compat.v1.global_variables_initializer()
+    sess.run(init)
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess=sess)
+    t_images, t_labels = sess.run([images, labels])
+    return(t_images, t_labels)
 
-train_dataset = tf.io.gfile.glob(tf_train_record_pattern)
-train_images, train_labels = batch_inputs(train_dataset, batch_size, train=True, num_preprocess_threads=2, num_readers=2)
-#train_labels_onehot = tf.one_hot(train_labels, num_classes, on_value=1, off_value=0, axis=1)
-print(train_images.get_shape())
-print(train_labels.get_shape())
 
-
-val_dataset = tf.io.gfile.glob(tf_val_record_pattern)
-val_images, val_labels = batch_inputs(val_dataset, batch_size, train=False, num_preprocess_threads=1, num_readers=1)
-#val_labels_onehot = tf.one_hot(val_labels, num_classes, on_value=1, off_value=0, axis=1)
-print(val_images.get_shape())
-print(val_labels.get_shape())
-
-
-#sess = tf.compat.v1.train.MonitoredTrainingSession(master=server.target, is_chief=(task_number == 0), hooks=[sync_replicas_hook])
-sess=tf.Session()
-init = tf.compat.v1.global_variables_initializer()
-sess.run(init)
-coord = tf.train.Coordinator()
-threads = tf.train.start_queue_runners(sess=sess)
-t_images, t_labels = sess.run([train_images, train_labels])
-print(t_images)
-print(t_labels)
+im, lb = next_batch(batch_size, 'train')
+image = im[2]
+#image = (image / 127.5) - 1
+print(image, image.shape)
+plt.imshow(image)
+plt.show()
