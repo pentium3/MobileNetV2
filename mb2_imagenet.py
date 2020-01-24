@@ -5,10 +5,10 @@ import pickle
 import tensorflow.contrib.slim as slim
 from tensorflow.contrib.layers.python.layers import batch_norm
 import tensorflow.contrib as tc
-import warnings
-warnings.simplefilter('ignore')
 
 from ops import *
+
+from transfer.read_imgnet import next_batch, next_batch_tensor
 
 class DataSets:
     def data_preprocessing(self, x, value_dtype):
@@ -63,11 +63,11 @@ class DataSets:
 
 train_data = DataSets( 'train', True )
 
-batch_size = 32
-train_steps = 60000
+batch_size = 128
+train_steps = 20000
 test_steps = 100
 IMGSIZE = 32
-IMPCLAS=10
+IMPCLAS=100
 x = tf.placeholder( tf.float32, [batch_size, IMGSIZE,IMGSIZE,3] )
 y = tf.placeholder( tf.int64, [batch_size,] )
 is_train = tf.placeholder(tf.bool, [])
@@ -126,7 +126,9 @@ with tf.Session(config=tf.ConfigProto(device_count={"CPU":12})) as sess:
     threads = tf.train.start_queue_runners(coord=coord)
 
     for i in range( train_steps ):
-        batch_data, batch_labels = train_data.next_batch( batch_size )
+        print("batch")
+        batch_data, batch_labels = next_batch( batch_size , 'train')
+        print("batch")
         #print("batch shape: ",batch_data.shape, batch_labels.shape)
         loss_val, acc_val, _ = sess.run( [loss, accuracy, train_op], feed_dict={x:batch_data, y:batch_labels, is_train:True} )
         if ( i+1 ) % 200 == 0:
@@ -135,7 +137,7 @@ with tf.Session(config=tf.ConfigProto(device_count={"CPU":12})) as sess:
             test_data = DataSets( 'test', False )
             all_test_acc_val = []
             for j in range( test_steps ):
-                test_batch_data, test_batch_labels = test_data.next_batch( batch_size )
+                test_batch_data, test_batch_labels = next_batch( batch_size , 'test')
                 test_acc_val = sess.run( [accuracy], feed_dict={ x:test_batch_data, y:test_batch_labels, is_train:False } )
                 all_test_acc_val.append( test_acc_val )
             test_acc = np.mean( all_test_acc_val )
