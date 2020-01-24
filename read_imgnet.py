@@ -178,8 +178,8 @@ def next_batch_tensor(batch_size, label):
     return(images, labels)
 
 
-for i in range(100):
-    batch_data, batch_labels = next_batch( batch_size , 'train')
+# for i in range(100):
+#     batch_data, batch_labels = next_batch( batch_size , 'train')
 
 # im, lb = next_batch(batch_size, 'train')
 # image = im[2]
@@ -188,11 +188,11 @@ for i in range(100):
 # plt.imshow(image)
 # plt.show()
 
-# sess=tf.compat.v1.Session()
-# init = tf.compat.v1.global_variables_initializer()
-# sess.run(init)
-# coord = tf.train.Coordinator()
-# threads = tf.train.start_queue_runners(sess=sess)
-# images, labels = next_batch_tensor(batch_size, 'train')
-# t_images, t_labels = sess.run([images, labels])
-# print(t_images, t_labels)
+sess=tf.compat.v1.Session()
+init = tf.compat.v1.global_variables_initializer()
+sess.run(init)
+coord = tf.train.Coordinator()
+threads = tf.train.start_queue_runners(sess=sess)
+images, labels = next_batch_tensor(batch_size, 'train')
+t_images, t_labels = sess.run([images, labels])
+print(t_images, t_labels)
