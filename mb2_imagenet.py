@@ -8,60 +8,60 @@ import tensorflow.contrib as tc
 
 from ops import *
 
-from transfer.read_imgnet import next_batch, next_batch_tensor
+from read_imgnet import next_batch, next_batch_tensor
 
-class DataSets:
-    def data_preprocessing(self, x, value_dtype):
-        x = x.astype(value_dtype)
-        return (x / 127.5) - 1
-    def __init__( self, filenames, need_shuffle ):
-        all_data = []
-        all_labels = []
-        from tensorflow.keras.datasets import cifar10
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-        x_train = self.data_preprocessing(x_train, "float64")
-        #x_train = x_train.reshape((x_train.shape[0], 32*32*3))
-        y_train = y_train.reshape((y_train.shape[0])).astype("int64")
-        x_test = self.data_preprocessing(x_test, "float64")
-        #x_test = x_test.reshape((x_test.shape[0], 32*32*3))
-        y_test = y_test.reshape((y_test.shape[0])).astype("int64")
-        if(filenames=='train'):
-            all_data.append(x_train)
-            all_labels.append(y_train)
-        else:
-            all_data.append(x_test)
-            all_labels.append(y_test)
-        self._data = np.vstack(all_data)
-        #self._data = self._data / 127.5 - 1
-        self._labels = np.hstack( all_labels )
-        self._num_examples = self._data.shape[0]
-        self._need_shuffle = need_shuffle
-        self._indicator = 0
-        if self._need_shuffle:
-            self._shffle_data()
-    def _shffle_data( self ):
-        p = np.random.permutation( self._num_examples )
-        self._data = self._data[p]
-        self._labels = self._labels[p]
-    def next_batch( self, batch_size ):
-        '''return batch_size example as a batch'''
-        end_indictor = self._indicator + batch_size
-        if end_indictor > self._num_examples:
-            if self._need_shuffle:
-                self._shffle_data()
-                self._indicator = 0
-                end_indictor = batch_size
-            else:
-                raise Exception( "have no more examples" )
-        if end_indictor > self._num_examples:
-            raise Exception( "batch size is larger than all example" )
-        batch_data = self._data[self._indicator:end_indictor]
-        batch_labels = self._labels[self._indicator:end_indictor]
-        self._indicator = end_indictor
-        return batch_data, batch_labels
+# class DataSets:
+#     def data_preprocessing(self, x, value_dtype):
+#         x = x.astype(value_dtype)
+#         return (x / 127.5) - 1
+#     def __init__( self, filenames, need_shuffle ):
+#         all_data = []
+#         all_labels = []
+#         from tensorflow.keras.datasets import cifar10
+#         (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+#         x_train = self.data_preprocessing(x_train, "float64")
+#         #x_train = x_train.reshape((x_train.shape[0], 32*32*3))
+#         y_train = y_train.reshape((y_train.shape[0])).astype("int64")
+#         x_test = self.data_preprocessing(x_test, "float64")
+#         #x_test = x_test.reshape((x_test.shape[0], 32*32*3))
+#         y_test = y_test.reshape((y_test.shape[0])).astype("int64")
+#         if(filenames=='train'):
+#             all_data.append(x_train)
+#             all_labels.append(y_train)
+#         else:
+#             all_data.append(x_test)
+#             all_labels.append(y_test)
+#         self._data = np.vstack(all_data)
+#         #self._data = self._data / 127.5 - 1
+#         self._labels = np.hstack( all_labels )
+#         self._num_examples = self._data.shape[0]
+#         self._need_shuffle = need_shuffle
+#         self._indicator = 0
+#         if self._need_shuffle:
+#             self._shffle_data()
+#     def _shffle_data( self ):
+#         p = np.random.permutation( self._num_examples )
+#         self._data = self._data[p]
+#         self._labels = self._labels[p]
+#     def next_batch( self, batch_size ):
+#         '''return batch_size example as a batch'''
+#         end_indictor = self._indicator + batch_size
+#         if end_indictor > self._num_examples:
+#             if self._need_shuffle:
+#                 self._shffle_data()
+#                 self._indicator = 0
+#                 end_indictor = batch_size
+#             else:
+#                 raise Exception( "have no more examples" )
+#         if end_indictor > self._num_examples:
+#             raise Exception( "batch size is larger than all example" )
+#         batch_data = self._data[self._indicator:end_indictor]
+#         batch_labels = self._labels[self._indicator:end_indictor]
+#         self._indicator = end_indictor
+#         return batch_data, batch_labels
 
 
-train_data = DataSets( 'train', True )
+# train_data = DataSets( 'train', True )
 
 batch_size = 128
 train_steps = 20000

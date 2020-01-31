@@ -10,7 +10,9 @@ warnings.simplefilter('ignore')
 
 from ops import *
 
-class DataSets:
+model_path = '/home/tidb/Desktop/MobileNetV2/model/pretrained'
+
+class DataSets10:
     def data_preprocessing(self, x, value_dtype):
         x = x.astype(value_dtype)
         return (x / 127.5) - 1
@@ -61,17 +63,10 @@ class DataSets:
         return batch_data, batch_labels
 
 
-
-#train_filename = [os.path.join(CIFAR_DIR, 'data_batch_%d' % i) for i in range(1, 6)]
-#test_filename = [os.path.join(CIFAR_DIR, 'test_batch')]
-# train_data_old = CifarData( train_filename, True )
-# test_data_old = CifarData( test_filename, False )
-train_data = DataSets( 'train', True )
-
-batch_size = 64
-train_steps = 30000
+batch_size = 32  #32
+train_steps = 30000  #60000
 test_steps = 100
-IMPCLAS=10
+FINIMPCLAS=10
 x = tf.placeholder( tf.float32, [batch_size, 32,32,3] )
 y = tf.placeholder( tf.int64, [batch_size,] )
 is_train = tf.placeholder(tf.bool, [])
@@ -106,14 +101,19 @@ net = res_block(net, 6, 160, 1, is_train, name='res7_3')
 net = res_block(net, 6, 320, 1, is_train, name='res8_1', shortcut=False)
 
 net = pwise_block(net, 1280, is_train, name='conv9_1')
-net = global_avg(net)
-y_ = flatten(conv_1x1(net, IMPCLAS, name='logits'))
+lastlevel = global_avg(net)
 
-print("output size:", y_.get_shape())
+paras = tf.contrib.slim.get_variables_to_restore(exclude=['logits_100'])
+saver = tf.train.Saver(paras)
 
 
-loss = tf.losses.sparse_softmax_cross_entropy( labels = y, logits = y_ )
-predict = tf.argmax( y_, 1 )
+finetune_y_ = flatten(conv_1x1(lastlevel, FINIMPCLAS, name='logits_10'))
+
+print("output size:", finetune_y_.get_shape())
+
+
+loss = tf.losses.sparse_softmax_cross_entropy( labels = y, logits = finetune_y_ )
+predict = tf.argmax( finetune_y_, 1 )
 correct_prediction = tf.equal( predict, y )
 accuracy = tf.reduce_mean( tf.cast(correct_prediction, tf.float64) )
 
@@ -122,36 +122,31 @@ with tf.name_scope( 'train_op' ):
     with tf.control_dependencies(update_ops):
         train_op = tf.train.AdamOptimizer( 1e-3 ).minimize( loss )
 
-init = tf.global_variables_initializer()
+
+pretrain_data = DataSets10( 'train', True )
 
 with tf.Session(config=tf.ConfigProto(device_count={"CPU":12})) as sess:
-    sess.run( init )
-    coord = tf.train.Coordinator()
-    threads = tf.train.start_queue_runners(coord=coord)
+    sess.run( tf.global_variables_initializer() )
+    saver.restore(sess,model_path)
+    
+    # coord = tf.train.Coordinator()
+    # threads = tf.train.start_queue_runners(coord=coord)
 
     for i in range( train_steps ):
-        batch_data, batch_labels = train_data.next_batch( batch_size )
+        batch_data, batch_labels = pretrain_data.next_batch( batch_size )
         #print("batch shape: ",batch_data.shape, batch_labels.shape)
         loss_val, acc_val, _ = sess.run( [loss, accuracy, train_op], feed_dict={x:batch_data, y:batch_labels, is_train:True} )
         if ( i+1 ) % 200 == 0:
             print('[Train] Step: %d, loss: %4.5f, acc: %4.5f' % ( i+1, loss_val, acc_val ))
         if ( i+1 ) % 1000 == 0:
-            #test_data = CifarData( test_filename, False )
-            test_data = DataSets( 'test', False )
+            pretest_data = DataSets10( 'test', False )
             all_test_acc_val = []
             for j in range( test_steps ):
-                test_batch_data, test_batch_labels = test_data.next_batch( batch_size )
+                test_batch_data, test_batch_labels = pretest_data.next_batch( batch_size )
                 test_acc_val = sess.run( [accuracy], feed_dict={ x:test_batch_data, y:test_batch_labels, is_train:False } )
                 all_test_acc_val.append( test_acc_val )
             test_acc = np.mean( all_test_acc_val )
             print('[Test ] Step: %d, acc: %4.5f' % ( (i+1), test_acc ))
     
-    coord.request_stop()
-    coord.join(threads)
-    sess.close()
-
-
-# model_path="./pretrained"
-# saver = tf.train.Saver()
-# saver_path = saver.save(sess, model_path)
-# print("Model saved in file:", saver_path)
+    # coord.request_stop()
+    # coord.join(threads)
