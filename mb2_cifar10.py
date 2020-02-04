@@ -68,7 +68,7 @@ class DataSets:
 # test_data_old = CifarData( test_filename, False )
 train_data = DataSets( 'train', True )
 
-batch_size = 64
+batch_size = 32
 train_steps = 30000
 test_steps = 100
 IMPCLAS=10

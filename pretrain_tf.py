@@ -69,7 +69,7 @@ class DataSets100:
 # test_data_old = CifarData( test_filename, False )
 pretrain_data = DataSets100( 'train', True )
 
-batch_size = 32  #32
+batch_size = 64  #32
 train_steps = 30000  #60000
 test_steps = 100
 PREIMPCLAS=100
