@@ -162,7 +162,7 @@ def next_batch(batch_size, label):
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess)
     t_images, t_labels = sess.run([images, labels])
-    return(t_images, t_labels)
+    return(t_images, t_labels) 
 
 def next_batch_tensor(batch_size, label):
     if(label=='train'):
@@ -188,11 +188,29 @@ def next_batch_tensor(batch_size, label):
 # plt.imshow(image)
 # plt.show()
 
-sess=tf.compat.v1.Session()
-init = tf.compat.v1.global_variables_initializer()
-sess.run(init)
-coord = tf.train.Coordinator()
-threads = tf.train.start_queue_runners(sess=sess)
-images, labels = next_batch_tensor(batch_size, 'train')
-t_images, t_labels = sess.run([images, labels])
-print(t_images, t_labels)
+# sess=tf.compat.v1.Session()
+# init = tf.compat.v1.global_variables_initializer()
+# sess.run(init)
+# coord = tf.train.Coordinator()
+# threads = tf.train.start_queue_runners(sess=sess)
+# images, labels = next_batch_tensor(batch_size, 'train')
+# t_images, t_labels = sess.run([images, labels])
+# print(t_images, t_labels)
+
+# train_dataset = tf.io.gfile.glob(tf_train_record_pattern)
+# t_images, t_labels = batch_inputs(train_dataset, batch_size, train=True, num_preprocess_threads=2, num_readers=2)
+# val_dataset = tf.io.gfile.glob(tf_val_record_pattern)
+# v_images, v_labels = batch_inputs(val_dataset, batch_size, train=False, num_preprocess_threads=1, num_readers=1)
+# print(t_images.get_shape())    # (107, 256, 256, 3)
+# print(t_labels.get_shape())    # (107,)
+# #sess = tf.compat.v1.train.MonitoredTrainingSession(master=server.target, is_chief=(task_number == 0), hooks=[sync_replicas_hook])
+# init = tf.global_variables_initializer()
+# with tf.Session(config=tf.ConfigProto(device_count={"CPU":12})) as sess:
+#     sess.run(init)
+#     coord = tf.train.Coordinator()
+#     threads = tf.train.start_queue_runners(sess=sess)
+#     for i in range(100):
+#         ii, ll = sess.run([t_images, t_labels])
+#         print("-----------------------------------------------")
+#         print(ll)
+
