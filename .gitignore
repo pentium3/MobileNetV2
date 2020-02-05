@@ -1,4 +1,5 @@
 /__pycache__/
 *.pyc
-/model/
-
+/mb_cifar100/
+/mb_imgnet/
+shell.sh
