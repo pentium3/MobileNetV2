@@ -11,7 +11,7 @@ from ops import *
 from read_imgnet import tf_train_record_pattern, tf_val_record_pattern, batch_inputs
 
 batch_size = 128
-train_steps = 20000
+train_steps = 30000
 test_steps = 100
 IMGSIZE = 32
 IMPCLAS=100

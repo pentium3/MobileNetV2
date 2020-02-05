@@ -10,17 +10,17 @@ warnings.simplefilter('ignore')
 
 from ops import *
 
-model_path = '/home/tidb/Desktop/MobileNetV2/mb_imgnet/pretrained'
+model_path = '/home/tidb/Desktop/MobileNetV2/mb_cifar100/pretrained'
 
-class DataSets10:
+class DataSets100:
     def data_preprocessing(self, x, value_dtype):
         x = x.astype(value_dtype)
         return (x / 127.5) - 1
     def __init__( self, filenames, need_shuffle ):
         all_data = []
         all_labels = []
-        from tensorflow.keras.datasets import cifar10
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        from tensorflow.keras.datasets import cifar100
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data()
         x_train = self.data_preprocessing(x_train, "float64")
         #x_train = x_train.reshape((x_train.shape[0], 32*32*3))
         y_train = y_train.reshape((y_train.shape[0])).astype("int64")
@@ -62,11 +62,12 @@ class DataSets10:
         self._indicator = end_indictor
         return batch_data, batch_labels
 
+pretrain_data = DataSets100( 'train', True )
 
-batch_size = 32  #32
+batch_size = 64  #32
 train_steps = 30000  #60000
 test_steps = 100
-FINIMPCLAS=10
+PREIMPCLAS=100
 x = tf.placeholder( tf.float32, [batch_size, 32,32,3] )
 y = tf.placeholder( tf.int64, [batch_size,] )
 is_train = tf.placeholder(tf.bool, [])
@@ -103,17 +104,13 @@ net = res_block(net, 6, 320, 1, is_train, name='res8_1', shortcut=False)
 net = pwise_block(net, 1280, is_train, name='conv9_1')
 lastlevel = global_avg(net)
 
-paras = tf.contrib.slim.get_variables_to_restore(exclude=['logits_100'])
-saver = tf.train.Saver(paras)
+pretrain_y_ = flatten(conv_1x1(lastlevel, PREIMPCLAS, name='logits_100'))
+
+print("output size:", pretrain_y_.get_shape())
 
 
-finetune_y_ = flatten(conv_1x1(lastlevel, FINIMPCLAS, name='logits_10'))
-
-print("output size:", finetune_y_.get_shape())
-
-
-loss = tf.losses.sparse_softmax_cross_entropy( labels = y, logits = finetune_y_ )
-predict = tf.argmax( finetune_y_, 1 )
+loss = tf.losses.sparse_softmax_cross_entropy( labels = y, logits = pretrain_y_ )
+predict = tf.argmax( pretrain_y_, 1 )
 correct_prediction = tf.equal( predict, y )
 accuracy = tf.reduce_mean( tf.cast(correct_prediction, tf.float64) )
 
@@ -122,13 +119,10 @@ with tf.name_scope( 'train_op' ):
     with tf.control_dependencies(update_ops):
         train_op = tf.train.AdamOptimizer( 1e-3 ).minimize( loss )
 
-
-pretrain_data = DataSets10( 'train', True )
+init = tf.global_variables_initializer()
 
 with tf.Session(config=tf.ConfigProto(device_count={"CPU":12})) as sess:
-    sess.run( tf.global_variables_initializer() )
-    saver.restore(sess,model_path)
-    
+    sess.run( init )
     # coord = tf.train.Coordinator()
     # threads = tf.train.start_queue_runners(coord=coord)
 
@@ -139,7 +133,7 @@ with tf.Session(config=tf.ConfigProto(device_count={"CPU":12})) as sess:
         if ( i+1 ) % 200 == 0:
             print('[Train] Step: %d, loss: %4.5f, acc: %4.5f' % ( i+1, loss_val, acc_val ))
         if ( i+1 ) % 1000 == 0:
-            pretest_data = DataSets10( 'test', False )
+            pretest_data = DataSets100( 'test', False )
             all_test_acc_val = []
             for j in range( test_steps ):
                 test_batch_data, test_batch_labels = pretest_data.next_batch( batch_size )
@@ -150,3 +144,9 @@ with tf.Session(config=tf.ConfigProto(device_count={"CPU":12})) as sess:
     
     # coord.request_stop()
     # coord.join(threads)
+
+    saver = tf.compat.v1.train.Saver()
+    saver_path = saver.save(sess, model_path)
+    print("Model saved in file:", saver_path)
+
+
