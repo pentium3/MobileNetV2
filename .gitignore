@@ -3,3 +3,6 @@
 /mb_cifar100/
 /mb_imgnet/
 shell.sh
+/mini_mb/mb_imgnet/
+/mini_mb/__pycache__/
+/mini_mb/shell.sh
