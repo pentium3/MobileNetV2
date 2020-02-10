@@ -1,0 +1,181 @@
+output size: (32, 10)
+[Train] Step: 200, loss: 1.82738, acc: 0.31250
+[Train] Step: 400, loss: 1.88937, acc: 0.21875
+[Train] Step: 600, loss: 1.61918, acc: 0.28125
+[Train] Step: 800, loss: 1.62844, acc: 0.40625
+[Train] Step: 1000, loss: 1.32462, acc: 0.50000
+[Test ] Step: 1000, acc: 0.41250
+[Train] Step: 1200, loss: 1.24888, acc: 0.56250
+[Train] Step: 1400, loss: 1.44575, acc: 0.46875
+[Train] Step: 1600, loss: 1.49146, acc: 0.37500
+[Train] Step: 1800, loss: 1.40446, acc: 0.40625
+[Train] Step: 2000, loss: 1.88687, acc: 0.40625
+[Test ] Step: 2000, acc: 0.39062
+[Train] Step: 2200, loss: 1.14136, acc: 0.53125
+[Train] Step: 2400, loss: 1.45135, acc: 0.50000
+[Train] Step: 2600, loss: 1.45251, acc: 0.43750
+[Train] Step: 2800, loss: 2.17460, acc: 0.28125
+[Train] Step: 3000, loss: 1.56421, acc: 0.46875
+[Test ] Step: 3000, acc: 0.53500
+[Train] Step: 3200, loss: 1.29918, acc: 0.53125
+[Train] Step: 3400, loss: 1.21720, acc: 0.53125
+[Train] Step: 3600, loss: 1.29566, acc: 0.50000
+[Train] Step: 3800, loss: 1.23739, acc: 0.50000
+[Train] Step: 4000, loss: 0.99375, acc: 0.68750
+[Test ] Step: 4000, acc: 0.56156
+[Train] Step: 4200, loss: 1.28277, acc: 0.50000
+[Train] Step: 4400, loss: 0.87944, acc: 0.65625
+[Train] Step: 4600, loss: 1.13736, acc: 0.56250
+[Train] Step: 4800, loss: 1.34249, acc: 0.50000
+[Train] Step: 5000, loss: 0.99518, acc: 0.71875
+[Test ] Step: 5000, acc: 0.61062
+[Train] Step: 5200, loss: 1.23685, acc: 0.50000
+[Train] Step: 5400, loss: 0.81610, acc: 0.65625
+[Train] Step: 5600, loss: 1.31681, acc: 0.46875
+[Train] Step: 5800, loss: 1.09512, acc: 0.50000
+[Train] Step: 6000, loss: 1.34929, acc: 0.59375
+[Test ] Step: 6000, acc: 0.61750
+[Train] Step: 6200, loss: 1.22076, acc: 0.46875
+[Train] Step: 6400, loss: 1.16714, acc: 0.62500
+[Train] Step: 6600, loss: 0.99077, acc: 0.71875
+[Train] Step: 6800, loss: 1.34358, acc: 0.50000
+[Train] Step: 7000, loss: 1.07718, acc: 0.46875
+[Test ] Step: 7000, acc: 0.66094
+[Train] Step: 7200, loss: 1.02422, acc: 0.59375
+[Train] Step: 7400, loss: 1.08025, acc: 0.62500
+[Train] Step: 7600, loss: 1.16396, acc: 0.56250
+[Train] Step: 7800, loss: 1.02263, acc: 0.59375
+[Train] Step: 8000, loss: 0.83038, acc: 0.71875
+[Test ] Step: 8000, acc: 0.67375
+[Train] Step: 8200, loss: 1.02722, acc: 0.68750
+[Train] Step: 8400, loss: 0.93176, acc: 0.75000
+[Train] Step: 8600, loss: 0.69354, acc: 0.78125
+[Train] Step: 8800, loss: 0.88726, acc: 0.68750
+[Train] Step: 9000, loss: 1.14691, acc: 0.56250
+[Test ] Step: 9000, acc: 0.66031
+[Train] Step: 9200, loss: 1.05395, acc: 0.62500
+[Train] Step: 9400, loss: 0.56855, acc: 0.81250
+[Train] Step: 9600, loss: 0.66093, acc: 0.75000
+[Train] Step: 9800, loss: 0.77461, acc: 0.68750
+[Train] Step: 10000, loss: 1.32123, acc: 0.59375
+[Test ] Step: 10000, acc: 0.67875
+[Train] Step: 10200, loss: 0.63839, acc: 0.81250
+[Train] Step: 10400, loss: 1.00075, acc: 0.71875
+[Train] Step: 10600, loss: 1.05521, acc: 0.59375
+[Train] Step: 10800, loss: 0.73760, acc: 0.78125
+[Train] Step: 11000, loss: 0.51630, acc: 0.81250
+[Test ] Step: 11000, acc: 0.70813
+[Train] Step: 11200, loss: 1.19665, acc: 0.71875
+[Train] Step: 11400, loss: 0.97593, acc: 0.71875
+[Train] Step: 11600, loss: 0.76257, acc: 0.75000
+[Train] Step: 11800, loss: 0.96978, acc: 0.71875
+[Train] Step: 12000, loss: 1.05182, acc: 0.59375
+[Test ] Step: 12000, acc: 0.72375
+[Train] Step: 12200, loss: 0.80107, acc: 0.78125
+[Train] Step: 12400, loss: 0.90222, acc: 0.65625
+[Train] Step: 12600, loss: 0.76473, acc: 0.71875
+[Train] Step: 12800, loss: 0.72980, acc: 0.71875
+[Train] Step: 13000, loss: 0.76427, acc: 0.75000
+[Test ] Step: 13000, acc: 0.70813
+[Train] Step: 13200, loss: 0.78704, acc: 0.65625
+[Train] Step: 13400, loss: 0.47741, acc: 0.84375
+[Train] Step: 13600, loss: 0.83553, acc: 0.68750
+[Train] Step: 13800, loss: 0.55575, acc: 0.84375
+[Train] Step: 14000, loss: 0.80214, acc: 0.71875
+[Test ] Step: 14000, acc: 0.70688
+[Train] Step: 14200, loss: 0.98227, acc: 0.59375
+[Train] Step: 14400, loss: 0.46388, acc: 0.87500
+[Train] Step: 14600, loss: 0.78017, acc: 0.65625
+[Train] Step: 14800, loss: 0.85492, acc: 0.65625
+[Train] Step: 15000, loss: 0.55557, acc: 0.84375
+[Test ] Step: 15000, acc: 0.74094
+[Train] Step: 15200, loss: 0.44856, acc: 0.84375
+[Train] Step: 15400, loss: 0.74331, acc: 0.78125
+[Train] Step: 15600, loss: 0.52619, acc: 0.84375
+[Train] Step: 15800, loss: 0.68003, acc: 0.75000
+[Train] Step: 16000, loss: 0.48673, acc: 0.87500
+[Test ] Step: 16000, acc: 0.74219
+[Train] Step: 16200, loss: 0.59077, acc: 0.75000
+[Train] Step: 16400, loss: 0.49998, acc: 0.84375
+[Train] Step: 16600, loss: 0.44522, acc: 0.87500
+[Train] Step: 16800, loss: 0.50573, acc: 0.78125
+[Train] Step: 17000, loss: 0.79489, acc: 0.65625
+[Test ] Step: 17000, acc: 0.75094
+[Train] Step: 17200, loss: 0.72754, acc: 0.75000
+[Train] Step: 17400, loss: 0.49401, acc: 0.78125
+[Train] Step: 17600, loss: 0.63265, acc: 0.84375
+[Train] Step: 17800, loss: 0.39420, acc: 0.87500
+[Train] Step: 18000, loss: 0.76183, acc: 0.78125
+[Test ] Step: 18000, acc: 0.75094
+[Train] Step: 18200, loss: 0.36329, acc: 0.87500
+[Train] Step: 18400, loss: 0.52107, acc: 0.81250
+[Train] Step: 18600, loss: 0.43559, acc: 0.78125
+[Train] Step: 18800, loss: 0.66085, acc: 0.75000
+[Train] Step: 19000, loss: 0.67920, acc: 0.81250
+[Test ] Step: 19000, acc: 0.75062
+[Train] Step: 19200, loss: 0.39433, acc: 0.84375
+[Train] Step: 19400, loss: 0.70075, acc: 0.81250
+[Train] Step: 19600, loss: 0.70684, acc: 0.81250
+[Train] Step: 19800, loss: 0.37803, acc: 0.90625
+[Train] Step: 20000, loss: 0.67279, acc: 0.71875
+[Test ] Step: 20000, acc: 0.74062
+[Train] Step: 20200, loss: 0.58002, acc: 0.81250
+[Train] Step: 20400, loss: 0.32069, acc: 0.87500
+[Train] Step: 20600, loss: 0.52139, acc: 0.78125
+[Train] Step: 20800, loss: 0.95994, acc: 0.65625
+[Train] Step: 21000, loss: 0.40225, acc: 0.90625
+[Test ] Step: 21000, acc: 0.76875
+[Train] Step: 21200, loss: 0.62641, acc: 0.71875
+[Train] Step: 21400, loss: 0.67360, acc: 0.75000
+[Train] Step: 21600, loss: 0.59313, acc: 0.78125
+[Train] Step: 21800, loss: 0.63594, acc: 0.75000
+[Train] Step: 22000, loss: 0.47168, acc: 0.81250
+[Test ] Step: 22000, acc: 0.76156
+[Train] Step: 22200, loss: 0.72963, acc: 0.71875
+[Train] Step: 22400, loss: 0.38195, acc: 0.81250
+[Train] Step: 22600, loss: 0.49321, acc: 0.87500
+[Train] Step: 22800, loss: 0.57332, acc: 0.75000
+[Train] Step: 23000, loss: 0.68182, acc: 0.78125
+[Test ] Step: 23000, acc: 0.76938
+[Train] Step: 23200, loss: 0.58587, acc: 0.81250
+[Train] Step: 23400, loss: 0.77070, acc: 0.78125
+[Train] Step: 23600, loss: 0.40323, acc: 0.84375
+[Train] Step: 23800, loss: 0.70296, acc: 0.75000
+[Train] Step: 24000, loss: 0.81498, acc: 0.62500
+[Test ] Step: 24000, acc: 0.76062
+[Train] Step: 24200, loss: 0.36875, acc: 0.87500
+[Train] Step: 24400, loss: 0.63660, acc: 0.78125
+[Train] Step: 24600, loss: 0.81851, acc: 0.71875
+[Train] Step: 24800, loss: 0.61328, acc: 0.81250
+[Train] Step: 25000, loss: 0.63760, acc: 0.78125
+[Test ] Step: 25000, acc: 0.77531
+[Train] Step: 25200, loss: 0.36577, acc: 0.87500
+[Train] Step: 25400, loss: 0.33243, acc: 0.87500
+[Train] Step: 25600, loss: 0.33536, acc: 0.87500
+[Train] Step: 25800, loss: 0.48433, acc: 0.87500
+[Train] Step: 26000, loss: 0.49375, acc: 0.78125
+[Test ] Step: 26000, acc: 0.77000
+[Train] Step: 26200, loss: 0.54407, acc: 0.75000
+[Train] Step: 26400, loss: 0.33328, acc: 0.90625
+[Train] Step: 26600, loss: 0.23715, acc: 0.93750
+[Train] Step: 26800, loss: 0.30390, acc: 0.87500
+[Train] Step: 27000, loss: 0.33225, acc: 0.87500
+[Test ] Step: 27000, acc: 0.77500
+[Train] Step: 27200, loss: 0.50772, acc: 0.78125
+[Train] Step: 27400, loss: 0.57999, acc: 0.78125
+[Train] Step: 27600, loss: 0.30667, acc: 0.87500
+[Train] Step: 27800, loss: 0.32899, acc: 0.81250
+[Train] Step: 28000, loss: 0.49043, acc: 0.81250
+[Test ] Step: 28000, acc: 0.77594
+[Train] Step: 28200, loss: 0.62865, acc: 0.78125
+[Train] Step: 28400, loss: 0.47787, acc: 0.84375
+[Train] Step: 28600, loss: 0.69126, acc: 0.75000
+[Train] Step: 28800, loss: 0.41849, acc: 0.84375
+[Train] Step: 29000, loss: 0.62505, acc: 0.78125
+[Test ] Step: 29000, acc: 0.78469
+[Train] Step: 29200, loss: 0.43274, acc: 0.81250
+[Train] Step: 29400, loss: 0.50434, acc: 0.81250
+[Train] Step: 29600, loss: 0.38765, acc: 0.87500
+[Train] Step: 29800, loss: 0.35572, acc: 0.84375
+[Train] Step: 30000, loss: 0.08110, acc: 1.00000
+[Test ] Step: 30000, acc: 0.76938
