@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/tidb/Desktop/MobileNetV2/mb_imgnet/pretrained"
+all_model_checkpoint_paths: "/home/tidb/Desktop/MobileNetV2/mb_imgnet/pretrained"
