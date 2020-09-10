@@ -17,8 +17,8 @@ batch_size = 128
 
 examples_per_shard = 1030
 input_queue_memory_factor = 3
-tf_train_record_pattern = "/home/tidb/Desktop/tfrecord_subclasses_train/train-*"
-tf_val_record_pattern = "/home/tidb/Desktop/tfrecord_subclasses_val/val-*"
+tf_train_record_pattern = "/home/tidb/Desktop/toshiba/tfrecord_subclasses_train/train-*"
+tf_val_record_pattern = "/home/tidb/Desktop/toshiba/tfrecord_subclasses_val/val-*"
 
 height = 32
 width = 32
